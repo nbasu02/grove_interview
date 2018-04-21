@@ -1,0 +1,34 @@
+Design:
+
+For this module, the following tools were used:
+
+* geocoder: This library gives an easy API for hitting google's geocode API.
+    This is used for the cli script, which involves passing in a zip code
+    OR an address.
+    However, please note because this is hitting the public API,
+    **it may fail at times due to rate limits being hit**
+
+* elasticsearch: To find the closest scores to the address given,
+    each store has a latlong field in elasticsearch, which is stored
+    as a geo_point.  The geo_point is then used for the scoring when
+    running the module
+
+Installation:
+
+First install elasticsearch.  I was using version 6.2.4.
+
+Then as per normal, run virtualenv <env_name> and pip install -r requirements.txt
+
+Before running the searcher, you must insert all data into the elasticsearch cluster:
+python load_data.py
+
+Usage:
+
+python find_store --address="<address>" [--units=(mi|km)] [--output=text|json]
+python find_store --zip="<zip>" [--units=(mi|km)] [--output=text|json]
+
+Using both --address and --zip is not allowed.
+
+Testing:
+
+ENVIRONMENT=testing nosetests
